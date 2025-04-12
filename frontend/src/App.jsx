@@ -7,7 +7,7 @@ function App() {
   const [dj, setDJ] = useState('');
 
   const handleSubmit = async () => {
-    const res = await fetch('http://localhost:5000/create-request', {
+    const res = await fetch('https://dj-request-app.onrender.com/create-request', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ song, dedication, dj })
