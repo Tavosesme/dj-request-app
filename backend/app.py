@@ -1,10 +1,12 @@
-
 from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 import os
 import uuid
 
 app = Flask(__name__, static_folder='static')
+CORS(app)  # 🔥 Activa CORS para permitir conexiones desde el frontend (Vercel)
 
+# Base de datos en memoria
 requests_db = {}
 
 @app.route("/create-request", methods=["POST"])
@@ -19,17 +21,6 @@ def create_request():
         "paid": False
     }
     return jsonify({"request_id": req_id})
-
-@app.route("/paypal-webhook", methods=["POST"])
-def paypal_webhook():
-    event = request.get_json()
-    if event.get("event_type") == "CHECKOUT.ORDER.APPROVED":
-        resource = event["resource"]
-        custom_id = resource.get("custom_id")
-        if custom_id in requests_db:
-            requests_db[custom_id]["paid"] = True
-            return "OK", 200
-    return "Ignored", 200
 
 @app.route("/requests", methods=["GET"])
 def get_requests():
@@ -49,8 +40,3 @@ def serve_frontend(path):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-from flask_cors import CORS
-
-app = Flask(__name__, static_folder='static')
-CORS(app)  # ← esta línea es la clave
