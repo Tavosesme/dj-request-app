@@ -49,3 +49,8 @@ def serve_frontend(path):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+from flask_cors import CORS
+
+app = Flask(__name__, static_folder='static')
+CORS(app)  # ← esta línea es la clave
